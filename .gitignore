@@ -1,0 +1,8 @@
+*.o
+*.state
+/xmonad.errors
+#
+*#
+/prompt-history
+/xmonad-x86_64-linux
+/*.hi
