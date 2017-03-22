@@ -15,7 +15,6 @@ import XMonad.Util.Themes
 import Graphics.X11
 import XMonad.Prompt
 import XMonad.Prompt.RunOrRaise
-import XMonad.Layout.IndependentScreens
 
 import qualified XMonad.Layout.Dwindle as Dw
 
@@ -46,7 +45,6 @@ myKeys = [
     ("M-S-f", spawn "~/.screenlayout/single.sh") ]
 
 main = do
-  nScreens <- countScreens
   xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmobarrc"
   xmonad $ docks def
     { manageHook = manageDocks <+>
