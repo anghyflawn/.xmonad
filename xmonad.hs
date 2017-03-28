@@ -3,6 +3,7 @@ import XMonad.Layout
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.UrgencyHook
 import XMonad.Util.EZConfig
 import XMonad.Util.Run(spawnPipe)
 import System.IO
@@ -27,9 +28,9 @@ myLayoutHook = smartBorders (tiled ||| Mirror tiled ||| tabbed  shrinkText (them
     dwindle = renamed [Replace "Dwindle"] $ Dw.Dwindle R Dw.CW 1.5 1.1
     multicol = ThreeCol 1 (3/100) (1/2)
 
-myPromptConfig = defaultXPConfig { font = "xft:Inconsolata-12",
-                                   position = Top,
-                                   height = 22 }
+myPromptConfig = def { font = "xft:Consolas-12",
+                       position = Top,
+                       height = 22 }
 
 
 myKeys = [ 
@@ -37,7 +38,7 @@ myKeys = [
     ("M-a", sendMessage MirrorExpand),
     ("M-b", sendMessage ToggleStruts),
     ("M-c", spawn "chromium"),
-    ("M-y", spawn "emacs"),
+    ("M-y", spawn "~/.local/bin/launch-emacs.sh"),
     ("M-p", spawn "dmenu_extended_run"),
     ("<XF86AudioMute>", spawn "amixer -q set Master toggle"),
     ("M-o", runOrRaisePrompt myPromptConfig ),
@@ -46,7 +47,7 @@ myKeys = [
 
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmobarrc"
-  xmonad $ docks def
+  xmonad $ withUrgencyHook NoUrgencyHook $ docks def
     { manageHook = manageDocks <+>
                    composeOne [ isFullscreen -?> doFullFloat,
                                 isDialog -?> doCenterFloat ] <+>
