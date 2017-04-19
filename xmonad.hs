@@ -12,6 +12,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.Renamed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.NoBorders
+import XMonad.Actions.NoBorders
 import XMonad.Util.Themes
 import Graphics.X11
 import XMonad.Prompt
@@ -28,7 +29,7 @@ myLayoutHook = smartBorders (tiled ||| Mirror tiled ||| tabbed  shrinkText (them
     dwindle = renamed [Replace "Dwindle"] $ Dw.Dwindle R Dw.CW 1.5 1.1
     multicol = ThreeCol 1 (3/100) (1/2)
 
-myPromptConfig = def { font = "xft:Consolas-12",
+myPromptConfig = def { font = "xft:Cousine-12",
                        position = Top,
                        height = 22 }
 
@@ -37,20 +38,26 @@ myKeys = [
     ("M-z", sendMessage MirrorShrink),
     ("M-a", sendMessage MirrorExpand),
     ("M-b", sendMessage ToggleStruts),
-    ("M-c", spawn "chromium"),
+    ("M-c", spawn "chromium --force-device-scale-factor=1.5"),
     ("M-y", spawn "~/.local/bin/launch-emacs.sh"),
+    ("M-S-y", spawn "systemctl start --user emacs"),
     ("M-p", spawn "dmenu_extended_run"),
     ("<XF86AudioMute>", spawn "amixer -q set Master toggle"),
+    ("<XF86PowerOff>", spawn "oblogout"),
+    ("<XF86MonBrightnessDown>", spawn "light -U 10"),
+    ("<XF86MonBrightnessUp>", spawn "light -A 10"),
     ("M-o", runOrRaisePrompt myPromptConfig ),
     ("M-f", spawn "~/.screenlayout/dual.sh"),
-    ("M-S-f", spawn "~/.screenlayout/single.sh") ]
+    ("M-S-f", spawn "~/.screenlayout/single.sh"),
+    ("M-S-b", withFocused toggleBorder ) ]
 
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmobarrc"
   xmonad $ withUrgencyHook NoUrgencyHook $ docks def
     { manageHook = manageDocks <+>
                    composeOne [ isFullscreen -?> doFullFloat,
-                                isDialog -?> doCenterFloat ] <+>
+                                isDialog -?> doCenterFloat,
+                                className =? "Oblogout" -?> doFullFloat ] <+>
                    manageHook def,
       layoutHook = avoidStruts $ myLayoutHook,
       logHook = dynamicLogWithPP xmobarPP
