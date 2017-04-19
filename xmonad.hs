@@ -52,7 +52,7 @@ myKeys = [
     ("M-S-b", withFocused toggleBorder ) ]
 
 main = do
-  xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmobarrc"
+  xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarrc"
   xmonad $ withUrgencyHook NoUrgencyHook $ docks def
     { manageHook = manageDocks <+>
                    composeOne [ isFullscreen -?> doFullFloat,

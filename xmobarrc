@@ -1,0 +1,22 @@
+Config { font = "xft:Cousine:pixelsize=16:antialias=true:hinting=true",
+         bgColor = "black",
+         fgColor = "grey",
+         position = TopW L 93,
+         commands = [Run Weather "EGPH" ["-t", "Edinburgh: <tempC>°C", "-L", "5", "-H", "20", "--normal", "green", "--high", "red", "--low", "lightblue" ] 1800,
+                     Run Date "%a %b %_d %k:%M" "date" 10,
+		     Run Com "/home/piosad/.local/bin/xmobar-wireless.sh" [] "wifi" 10,
+                     Run BatteryP ["BAT0"] ["-t", "<acstatus>",
+                               "-L", "10", "-H", "80",
+                               "-l", "red", "-h", "green",
+                               "--", "-O", "Charging", "-o", "Battery: <left>% (<timeleft>)"] 10,
+                     Run Kbd [("gb", "EN"), ("ru", "RU")],
+                     Run Mail [(" | Unread: ", "~/mail/work/INBOX")] "mail",
+                     Run StdinReader],
+         
+         sepChar = "%",
+         alignSep = "}{",
+         template = "%StdinReader% }{ <fc=#ee9a00>%date%</fc>%mail% | %wifi% | %battery% | %EGPH% | %kbd% " }
+
+-- Local Variables:
+-- mode: haskell
+-- End:
