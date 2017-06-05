@@ -17,6 +17,7 @@ import XMonad.Util.Themes
 import Graphics.X11
 import XMonad.Prompt
 import XMonad.Prompt.RunOrRaise
+import XMonad.Prompt.Pass
 
 import qualified XMonad.Layout.Dwindle as Dw
 
@@ -31,14 +32,13 @@ myLayoutHook = smartBorders (tiled ||| Mirror tiled ||| tabbed  shrinkText (them
 
 myPromptConfig = def { font = "xft:Cousine-12",
                        position = Top,
-                       height = 22 }
-
+                       height = 25 }
 
 myKeys = [ 
     ("M-z", sendMessage MirrorShrink),
     ("M-a", sendMessage MirrorExpand),
     ("M-b", sendMessage ToggleStruts),
-    ("M-c", spawn "chromium --force-device-scale-factor=1.5"),
+    ("M-c", spawn "chromium"),
     ("M-y", spawn "~/.local/bin/launch-emacs.sh"),
     ("M-S-y", spawn "systemctl start --user emacs"),
     ("M-p", spawn "dmenu_extended_run"),
@@ -49,7 +49,10 @@ myKeys = [
     ("M-o", runOrRaisePrompt myPromptConfig ),
     ("M-f", spawn "~/.screenlayout/dual.sh"),
     ("M-S-f", spawn "~/.screenlayout/single.sh"),
-    ("M-S-b", withFocused toggleBorder ) ]
+    ("M-S-b", withFocused toggleBorder),
+    ("M-k", passPrompt myPromptConfig),
+    ("M-S-k", passGeneratePrompt myPromptConfig),
+    ("M-S-C-k", passRemovePrompt myPromptConfig)]
 
 main = do
   xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarrc"
